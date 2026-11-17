@@ -4,7 +4,7 @@ from sqlalchemy import Column, Integer, String, DateTime, Text, ForeignKey, Tabl
 from sqlalchemy.orm import relationship, declarative_base, sessionmaker # create a base class for declarative class definitions
 
 
-DATABASE_URL = "sqlite:///database.db" # define the database URL for SQLite
+DATABASE_URL = "sqlite:///./database.db" # define the database URL for SQLite
 
 engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False}) # create an engine for the database connection
 
