@@ -22,3 +22,27 @@ class Category(Base):
     name: Mapped[str] = mapped_column(String(50), unique=True, nullable=False)
     slug: Mapped[str] = mapped_column(String(50), unique=True, nullable=False)
     notes: Mapped[List["Note"]] = relationship(back_populates="category", cascade="all, delete-orphan")
+
+
+class Tag(Base):
+    __tablename__ = "tags"
+
+    id: Mapped[int] = mapped_column(primary_key=True, index=True)
+    name: Mapped[str] = mapped_column(String(30), unique=True, nullable=False)
+
+    notes: Mapped[List["Note"]] = relationship(secondary=note_tag, back_populates="tags")
+
+
+class Note(Base):
+    __tablename__ = "notes"
+
+    id: Mapped[int] = mapped_column(primary_key=True, index=True)
+    title: Mapped[str] = mapped_column(String(100), nullable=False)
+    content: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    category_id: Mapped[int] = mapped_column(ForeignKey("categories.id", ondelete="SET NULL"), nullable=True)
+    category: Mapped[Optional["Category"]] = relationship(back_populates="notes")
+
+    tags: Mapped[List["Tag"]] = relationship(secondary=note_tag, back_populates="notes")
